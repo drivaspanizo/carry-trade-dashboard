@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Carry Trade Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="dashboard-header">
+        <div class="container">
+            <div class="header-content">
+                <h1>Global Carry Trade Dashboard</h1>
+                <div class="header-info">
+                    <div class="timestamp">
+                        <span id="current-time">June 3, 2025, 18:58 CEST</span>
+                        <span class="update-label">Last Updated</span>
+                    </div>
+                    <div class="regime-indicator">
+                        <span class="status status--warning" id="macro-regime">Neutral / Mixed Signals</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+        <div class="container">
+            <!-- Interest Rate Matrix Section -->
+            <section class="dashboard-section">
+                <div class="section-header">
+                    <h2>Interest Rate Matrix</h2>
+                    <p class="section-subtitle">Current central bank policy rates and interbank rates</p>
+                </div>
+                <div class="card">
+                    <div class="table-container">
+                        <table class="data-table" id="rates-table">
+                            <thead>
+                                <tr>
+                                    <th class="sortable" data-column="currency">Currency</th>
+                                    <th class="sortable" data-column="cb_rate">CB Rate (%)</th>
+                                    <th class="sortable" data-column="interbank">1M Interbank (%)</th>
+                                    <th class="sortable" data-column="change">1M Change (bps)</th>
+                                    <th class="sortable" data-column="volatility">Volatility</th>
+                                    <th class="sortable" data-column="policy">Recent Policy</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rates-tbody">
+                                <!-- Populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Carry Trade Pair Analyzer Section -->
+            <section class="dashboard-section">
+                <div class="section-header">
+                    <h2>Carry Trade Pair Analyzer</h2>
+                    <p class="section-subtitle">Top currency pairs ranked by risk-adjusted returns</p>
+                </div>
+                
+                <div class="filter-controls">
+                    <div class="filter-group">
+                        <label class="form-label" for="volatility-filter">Max Volatility (%)</label>
+                        <select class="form-control" id="volatility-filter">
+                            <option value="50">All Pairs</option>
+                            <option value="25">≤ 25%</option>
+                            <option value="15">≤ 15%</option>
+                            <option value="10">≤ 10%</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="form-label" for="region-filter">Region Filter</label>
+                        <select class="form-control" id="region-filter">
+                            <option value="all">All Regions</option>
+                            <option value="g10">G10 Only</option>
+                            <option value="em">Emerging Markets</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="table-container">
+                        <table class="data-table" id="pairs-table">
+                            <thead>
+                                <tr>
+                                    <th class="sortable" data-column="pair">Currency Pair</th>
+                                    <th class="sortable" data-column="long">Long Currency</th>
+                                    <th class="sortable" data-column="short">Short Currency</th>
+                                    <th class="sortable" data-column="spread">Interest Spread (%)</th>
+                                    <th class="sortable" data-column="carry_return">Expected Carry (%)</th>
+                                    <th class="sortable" data-column="volatility">FX Volatility (%)</th>
+                                    <th class="sortable" data-column="sharpe">Risk-Adj Return</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pairs-tbody">
+                                <!-- Populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="chart-section">
+                    <h3>Risk vs Return Analysis</h3>
+                    <div class="chart-container">
+                        <img src="https://pplx-res.cloudinary.com/image/upload/v1748970240/pplx_code_interpreter/03a9289e_anpsgu.jpg" alt="Carry Trade Risk vs Return Scatter Plot" class="chart-image">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Historical Backtest Section -->
+            <section class="dashboard-section">
+                <div class="section-header">
+                    <h2>Historical Backtest Tool</h2>
+                    <p class="section-subtitle">Analyze carry trade performance over different time periods</p>
+                </div>
+                
+                <div class="backtest-controls">
+                    <div class="filter-group">
+                        <label class="form-label" for="pair-selector">Currency Pair</label>
+                        <select class="form-control" id="pair-selector">
+                            <option value="BRL/JPY">BRL/JPY</option>
+                            <option value="TRY/CHF">TRY/CHF</option>
+                            <option value="MXN/JPY">MXN/JPY</option>
+                            <option value="ZAR/CHF">ZAR/CHF</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="form-label" for="period-selector">Time Period</label>
+                        <select class="form-control" id="period-selector">
+                            <option value="3M">3 Months</option>
+                            <option value="6M">6 Months</option>
+                            <option value="1Y">1 Year</option>
+                            <option value="5Y">5 Years</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="backtest-results">
+                    <div class="performance-metrics">
+                        <div class="metric-card">
+                            <h4>Total Return</h4>
+                            <span class="metric-value positive" id="total-return">+12.1%</span>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Volatility</h4>
+                            <span class="metric-value" id="volatility-metric">14.2%</span>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Sharpe Ratio</h4>
+                            <span class="metric-value" id="sharpe-metric">0.85</span>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Max Drawdown</h4>
+                            <span class="metric-value negative" id="max-drawdown">-6.7%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Macro Regime Overlay Section -->
+            <section class="dashboard-section">
+                <div class="section-header">
+                    <h2>Macro Regime Overlay</h2>
+                    <p class="section-subtitle">Key market indicators affecting carry trade environment</p>
+                </div>
+                
+                <div class="macro-indicators">
+                    <div class="indicator-card">
+                        <h4>VIX Index</h4>
+                        <span class="indicator-value">19.30</span>
+                        <span class="indicator-label">Moderate Risk</span>
+                    </div>
+                    <div class="indicator-card">
+                        <h4>Dollar Index (DXY)</h4>
+                        <span class="indicator-value">98.90</span>
+                        <span class="indicator-label">Neutral</span>
+                    </div>
+                    <div class="indicator-card">
+                        <h4>US 2Y/10Y Spread</h4>
+                        <span class="indicator-value">0.52%</span>
+                        <span class="indicator-label">Normal Curve</span>
+                    </div>
+                </div>
+                
+                <div class="regime-summary card">
+                    <h3>Current Regime Assessment</h3>
+                    <p class="regime-description">
+                        Moderate volatility environment with carry-friendly conditions but ongoing policy uncertainty. 
+                        VIX below 20 suggests manageable risk, while central bank easing cycles support carry trades.
+                        Monitor for sudden policy shifts and risk-off events.
+                    </p>
+                </div>
+
+                <div class="chart-section">
+                    <h3>Central Bank Policy Rates</h3>
+                    <div class="chart-container">
+                        <img src="https://pplx-res.cloudinary.com/image/upload/v1748970295/pplx_code_interpreter/d638338d_uvhaek.jpg" alt="Central Bank Policy Rates by Currency" class="chart-image">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Natural Language Assistant Section -->
+            <section class="dashboard-section">
+                <div class="section-header">
+                    <h2>Trading Assistant</h2>
+                    <p class="section-subtitle">Ask questions about carry trade strategies and market analysis</p>
+                </div>
+                
+                <div class="assistant-container">
+                    <div class="quick-questions">
+                        <h4>Quick Questions</h4>
+                        <div class="question-buttons">
+                            <button class="btn btn--secondary question-btn" data-question="Which currency pair has the highest yield differential with low volatility?">Best Low-Vol Pairs?</button>
+                            <button class="btn btn--secondary question-btn" data-question="How did the TRY/JPY carry trade perform in 2024?">TRY/JPY Performance</button>
+                            <button class="btn btn--secondary question-btn" data-question="What are the main risks for carry trades in the current environment?">Current Risks</button>
+                            <button class="btn btn--secondary question-btn" data-question="Should I avoid high-volatility emerging market pairs?">EM Pair Safety</button>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-interface">
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="chat-message assistant">
+                                <div class="message-content">
+                                    <p>Welcome to the Carry Trade Assistant! I can help you analyze currency pairs, assess risks, and provide strategic insights based on current market conditions.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input-container">
+                            <input type="text" class="form-control" id="chat-input" placeholder="Ask about carry trade strategies, risks, or specific currency pairs...">
+                            <button class="btn btn--primary" id="send-message">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="dashboard-footer">
+        <div class="container">
+            <p class="footer-text">
+                Data Sources: Central Banks, IMF, Trading Economics | 
+                <strong>Disclaimer:</strong> This dashboard is for educational purposes. Past performance does not guarantee future results.
+            </p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
